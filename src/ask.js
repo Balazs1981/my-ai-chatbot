@@ -20,8 +20,13 @@ async function askAI() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral/mistral-7b-instruct:free", // Ellenőrizd, hogy helyes a modell neve
-        messages: [{ role: "user", content: userInput }]  // Itt a felhasználó inputját küldjük el
+        model: "mistral-7b-instruct", // Ellenőrizd a pontos modell nevet, ha nem a "mistral/mistral-7b-instruct:free"
+        messages: [
+          {
+            role: "user", 
+            content: userInput // A felhasználó kérdése
+          }
+        ]
       })
     });
 
