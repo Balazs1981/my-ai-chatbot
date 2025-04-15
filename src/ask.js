@@ -20,21 +20,23 @@ async function askAI() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-7b-instruct", // Ellenőrizd a pontos modell nevet!
+        model: "mistral-7b-instruct", // Győződjünk meg róla, hogy ez a helyes modell neve!
         messages: [
           {
-            role: "user", // A felhasználó kérdése
-            content: userInput // A beírt kérdés
+            role: "user", // Felhasználói szerepkör
+            content: userInput // A felhasználó beírt kérdése
           }
-        ]
+        ],
+        temperature: 0.7, // Beállítható paraméterek (pl. random válaszok)
+        max_tokens: 150 // Max. tokenek a válaszra (opcionális)
       })
     });
 
-    if (!response.ok) throw new Error("Hiba a válasz során: " + response.status); // Hibaüzenet a válasz alapján
+    if (!response.ok) throw new Error("Hiba a válasz során: " + response.status); // Hibakezelés a válasz alapján
 
     const data = await response.json();
-    const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz"; // Kivonjuk a választ
-    responseEl.innerText = aiReply; // Megjelenítjük a választ
+    const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz"; // AI válasz feldolgozása
+    responseEl.innerText = aiReply; // Válasz megjelenítése
 
   } catch (error) {
     console.error(error);
