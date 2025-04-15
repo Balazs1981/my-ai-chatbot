@@ -1,11 +1,18 @@
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const API_KEY = import.meta.env.VITE_OPENROUTER_KEY;
+const API_KEY = process.env.VITE_OPENROUTER_KEY;
 console.log("Kulcs:", API_KEY);
-console.log("Teszt:", "kulcs" + import.meta.env.VITE_OPENROUTER_KEY);
 
 async function askAI() {
   const userInput = document.getElementById("userInput").value;
   const responseEl = document.getElementById("response");
+
+  // Ha üres a szöveg
+  if (!userInput.trim()) {
+    responseEl.innerText = "Írj be valamit előbb!";
+    return;
+  }
+
+  console.log("Küldött üzenet:", userInput);
 
   try {
     const response = await fetch(API_URL, {
@@ -20,9 +27,14 @@ async function askAI() {
       })
     });
 
+    // Nyers válasz megjelenítése debughoz
+    const raw = await response.text();
+    console.log("Nyers válasz:", raw);
+
+    // Ha nem sikerült a válasz
     if (!response.ok) throw new Error("Hiba a válasz során");
 
-    const data = await response.json();
+    const data = JSON.parse(raw);
     const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz";
     responseEl.innerText = aiReply;
 
