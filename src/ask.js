@@ -20,7 +20,7 @@ async function askAI() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-7b-instruct", // Győződjünk meg róla, hogy ez a helyes modell neve!
+        model: "gpt-3.5-turbo", // Módosított modell
         messages: [
           {
             role: "user", // Felhasználói szerepkör
