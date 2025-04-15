@@ -12,7 +12,7 @@ async function askAI() {
   console.log("User Input:", userInput);
 
   try {
-    // Helyes kérés küldése
+    // API kérés elküldése
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -20,25 +20,25 @@ async function askAI() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-7b-instruct", // Ellenőrizd a pontos modell nevet, ha nem a "mistral/mistral-7b-instruct:free"
+        model: "mistral-7b-instruct", // Ellenőrizd a pontos modell nevet!
         messages: [
           {
-            role: "user", 
-            content: userInput // A felhasználó kérdése
+            role: "user", // A felhasználó kérdése
+            content: userInput // A beírt kérdés
           }
         ]
       })
     });
 
-    if (!response.ok) throw new Error("Hiba a válasz során: " + response.status); // További hiba részletezés
+    if (!response.ok) throw new Error("Hiba a válasz során: " + response.status); // Hibaüzenet a válasz alapján
 
     const data = await response.json();
     const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz"; // Kivonjuk a választ
-    responseEl.innerText = aiReply; // Válasz megjelenítése a weboldalon
+    responseEl.innerText = aiReply; // Megjelenítjük a választ
 
   } catch (error) {
     console.error(error);
-    responseEl.innerText = "Hiba történt a válasz során: " + error.message; // Tovább specifikáljuk a hibaüzenetet
+    responseEl.innerText = "Hiba történt a válasz során: " + error.message; // Hibát részletesebben
   }
 }
 
