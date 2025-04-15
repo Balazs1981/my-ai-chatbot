@@ -2,7 +2,7 @@ const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const API_KEY = import.meta.env.VITE_OPENROUTER_KEY;
 
 console.log("Kulcs:", API_KEY);
-console.log("Teszt:", "kulcs" + import.meta.env.VITE_OPENROUTER_KEY);  // Csak teszteléshez
+console.log("Teszt:", "kulcs" + import.meta.env.VITE_OPENROUTER_KEY); // Teszteléshez
 
 async function askAI() {
   const userInput = document.getElementById("userInput").value;
@@ -32,7 +32,12 @@ async function askAI() {
       })
     });
 
-    if (!response.ok) throw new Error("Hiba a válasz során: " + response.status); // Hibakezelés a válasz alapján
+    // Hibák kezelése a válasz alapján
+    if (!response.ok) {
+      const errorData = await response.json(); // A hiba részletezése
+      console.error("API Error:", errorData); // Hibák kiírása a konzolra
+      throw new Error(`Hiba a válasz során: ${response.status} - ${errorData.error?.message || 'Ismeretlen hiba'}`);
+    }
 
     const data = await response.json();
     const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz"; // AI válasz feldolgozása
