@@ -1,5 +1,6 @@
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const API_KEY = process.env.VITE_OPENROUTER_KEY;
+console.log("Kulcs:", API_KEY);
 
 async function askAI() {
   const userInput = document.getElementById("userInput").value;
