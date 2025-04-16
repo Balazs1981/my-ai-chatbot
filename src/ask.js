@@ -1,5 +1,5 @@
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+const API_KEY = import.meta.env.VITE_OPENROUTER_KEY;
 
 console.log("Kulcs:", API_KEY);
 console.log("Teszt:", "kulcs" + API_KEY);
