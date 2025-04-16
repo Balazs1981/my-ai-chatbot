@@ -18,7 +18,7 @@ async function askAI() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mixtral-8x7b-32768", // Groq egyik támogatott modellje
+        model: "llama3-70b-8192", // Groq egyik támogatott modellje
         messages: [
           { role: "system", content: "You are a helpful assistant." },
           { role: "user", content: userInput }
