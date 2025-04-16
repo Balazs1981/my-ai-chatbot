@@ -1,18 +1,16 @@
-const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const API_KEY = import.meta.env.VITE_OPENROUTER_KEY;
+const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 console.log("Kulcs:", API_KEY);
-console.log("Teszt:", "kulcs" + import.meta.env.VITE_OPENROUTER_KEY); // Teszteléshez
+console.log("Teszt:", "kulcs" + API_KEY);
 
 async function askAI() {
   const userInput = document.getElementById("userInput").value;
   const responseEl = document.getElementById("response");
 
-  // Ellenőrizzük, hogy a felhasználó valóban beírt valamit
   console.log("User Input:", userInput);
 
   try {
-    // API kérés elküldése
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -20,32 +18,27 @@ async function askAI() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", // Módosított modell
+        model: "mixtral-8x7b-32768", // Groq egyik támogatott modellje
         messages: [
-          {
-            role: "user", // Felhasználói szerepkör
-            content: userInput // A felhasználó beírt kérdése
-          }
-        ],
-        temperature: 0.7, // Beállítható paraméterek (pl. random válaszok)
-        max_tokens: 150 // Max. tokenek a válaszra (opcionális)
+          { role: "system", content: "You are a helpful assistant." },
+          { role: "user", content: userInput }
+        ]
       })
     });
 
-    // Hibák kezelése a válasz alapján
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorData = await response.json(); // A hiba részletezése
-      console.error("API Error:", errorData); // Hibák kiírása a konzolra
-      throw new Error(`Hiba a válasz során: ${response.status} - ${errorData.error?.message || 'Ismeretlen hiba'}`);
+      console.error("API Error:", data);
+      throw new Error(`Hiba a válasz során: ${response.status} - ${data.error?.message || "Ismeretlen hiba"}`);
     }
 
-    const data = await response.json();
-    const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz"; // AI válasz feldolgozása
-    responseEl.innerText = aiReply; // Válasz megjelenítése
+    const aiReply = data.choices?.[0]?.message?.content || "Nincs válasz";
+    responseEl.innerText = aiReply;
 
   } catch (error) {
     console.error(error);
-    responseEl.innerText = "Hiba történt a válasz során: " + error.message; // Hibát részletesebben
+    responseEl.innerText = "Hiba történt a válasz során.";
   }
 }
 
